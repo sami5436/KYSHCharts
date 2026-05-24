@@ -43,6 +43,16 @@ export function computeLevels(
   const lastKey = dayKeys[dayKeys.length - 1];
   const prevKey = dayKeys[dayKeys.length - 2];
 
+  if (lastKey) {
+    const today = byDay.get(lastKey)!;
+    if (settings.levels.hod) {
+      out.push({ key: "hod", label: "HOD", value: Math.max(...today.map((c) => c.high)) });
+    }
+    if (settings.levels.lod) {
+      out.push({ key: "lod", label: "LOD", value: Math.min(...today.map((c) => c.low)) });
+    }
+  }
+
   if (prevKey) {
     const prev = byDay.get(prevKey)!;
     if (settings.levels.pdh) {

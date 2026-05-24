@@ -15,6 +15,8 @@ export const INDICATOR_LABELS: Record<IndicatorKey, string> = {
 };
 
 export const LEVEL_LABELS: Record<LevelKey, string> = {
+  hod: "High of day",
+  lod: "Low of day",
   pdh: "Prior day high",
   pdl: "Prior day low",
   pwh: "Prior week high",
@@ -37,6 +39,8 @@ export const DEFAULT_SETTINGS: Settings = {
     macd: false,
   },
   levels: {
+    hod: true,
+    lod: true,
     pdh: true,
     pdl: true,
     pwh: false,

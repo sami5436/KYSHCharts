@@ -31,6 +31,8 @@ export type IndicatorKey =
   | "macd";
 
 export type LevelKey =
+  | "hod"
+  | "lod"
   | "pdh"
   | "pdl"
   | "pwh"
