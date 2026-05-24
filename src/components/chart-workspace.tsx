@@ -9,14 +9,17 @@ import { Chart } from "./chart";
 import { LevelReadout } from "./level-readout";
 import { SearchBar } from "./search-bar";
 import { SettingsPanel } from "./settings-panel";
+import { TableView } from "./table-view";
 import { TimeframeBar } from "./timeframe-bar";
 import { TopBar } from "./top-bar";
+import type { ViewMode } from "./view-toggle";
 
 export function ChartWorkspace() {
   const [symbol, setSymbol] = useState<SymbolEntry>(DEFAULT_SYMBOL);
   const [timeframe, setTimeframe] = useState<Timeframe>(DEFAULT_TIMEFRAME);
   const [settings, setSettings] = useSettings();
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [view, setView] = useState<ViewMode>("chart");
   const [candles, setCandles] = useState<Candle[]>([]);
   const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
   const [error, setError] = useState<string | null>(null);
@@ -61,6 +64,8 @@ export function ChartWorkspace() {
         symbol={symbol}
         timeframe={timeframe}
         lastPrice={lastPrice}
+        view={view}
+        onViewChange={setView}
         onToggleSettings={() => setSettingsOpen((v) => !v)}
         settingsOpen={settingsOpen}
       />
@@ -73,20 +78,19 @@ export function ChartWorkspace() {
       )}
       <SearchBar onSelect={setSymbol} />
       <div className="flex-1 flex flex-col min-h-0 relative">
-        <Chart candles={candles} settings={settings} levels={levels} />
+        {view === "chart" ? (
+          <Chart candles={candles} settings={settings} levels={levels} />
+        ) : (
+          <TableView candles={candles} settings={settings} levels={levels} />
+        )}
         {status === "loading" && (
-          <div className="absolute top-2 left-3 k-label">loading...</div>
+          <div className="absolute top-2 left-3 k-label z-10">loading...</div>
         )}
         {status === "error" && (
-          <div className="absolute top-2 left-3 text-bear">error: {error}</div>
-        )}
-        {status === "idle" && candles.length === 0 && (
-          <div className="absolute inset-0 flex items-center justify-center text-muted">
-            no data
-          </div>
+          <div className="absolute top-2 left-3 text-bear z-10">error: {error}</div>
         )}
       </div>
-      <LevelReadout levels={levels} />
+      {view === "chart" && <LevelReadout levels={levels} />}
       <TimeframeBar value={timeframe} onChange={setTimeframe} />
     </div>
   );
