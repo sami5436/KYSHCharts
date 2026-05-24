@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { TIMEFRAMES } from "@/lib/constants";
 import type { Timeframe } from "@/lib/types";
 
@@ -25,6 +26,14 @@ export function TimeframeBar({ value, onChange }: Props) {
         </button>
       ))}
       <div className="flex-1" />
+      <Link
+        href="/docs"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="px-4 flex items-center k-border-l k-hover"
+      >
+        docs
+      </Link>
     </div>
   );
 }
