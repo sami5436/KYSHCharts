@@ -1,36 +1,36 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# KYSH / charts
 
-## Getting Started
+Quick charts. Free data. No noise.
 
-First, run the development server:
+A minimal alternative to TradingView for personal use. Brutalist mono aesthetic, free-only data sources, multiple timeframes, the usual indicators, key price levels, and a settings dropdown to toggle anything off.
 
-```bash
+## Data sources
+
+- **Crypto:** Binance public REST/WebSocket endpoints. No key required.
+- **Stocks:** Yahoo Finance via the `yahoo-finance2` npm package. No key required.
+
+## Stack
+
+- Next.js 16 (App Router, TypeScript, src/)
+- Tailwind CSS v4 (CSS-based config)
+- `lightweight-charts` (TradingView's open-source charting library)
+- Deployed on Vercel from this repo.
+
+## Develop
+
+```
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Deploy
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Connect this repo to a new Vercel project. No environment variables required.
 
-## Learn More
+## Scope
 
-To learn more about Next.js, take a look at the following resources:
+In: candles, timeframes (1m to 1W), moving averages, VWAP, Bollinger, RSI, MACD, prior-day/week highs and lows, premarket H/L, round-number levels, symbol search across both markets, per-overlay toggles persisted to localStorage.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Out: order book / DOM (not free for stocks), drawing tools, alerts, accounts, broker integration.
