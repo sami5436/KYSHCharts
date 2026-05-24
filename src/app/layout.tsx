@@ -7,9 +7,29 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const SITE_URL = process.env.VERCEL_URL
+  ? `https://${process.env.VERCEL_URL}`
+  : "http://localhost:3000";
+
+const TAGLINE = "the chart doesnt care what you think";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: "KYSH / charts",
-  description: "Quick charts. Free data. No noise.",
+  description: TAGLINE,
+  applicationName: "KYSH",
+  openGraph: {
+    title: "KYSH / charts",
+    description: TAGLINE,
+    siteName: "KYSH",
+    type: "website",
+    url: "/",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "KYSH / charts",
+    description: TAGLINE,
+  },
 };
 
 export const viewport = {
