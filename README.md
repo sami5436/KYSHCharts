@@ -6,7 +6,7 @@ A minimal alternative to TradingView for personal use. Brutalist mono aesthetic,
 
 ## Data sources
 
-- **Crypto:** Binance public REST/WebSocket endpoints. No key required.
+- **Crypto:** Binance.US public REST. No key required. (`api.binance.com` is geo-blocked from US, which is where Vercel serverless functions run by default.)
 - **Stocks:** Yahoo Finance via the `yahoo-finance2` npm package. No key required.
 
 ## Stack
