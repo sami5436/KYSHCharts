@@ -58,8 +58,8 @@ export function SearchBar({ onSelect }: Props) {
 
   return (
     <div ref={wrap} className="k-border-b relative">
-      <div className="flex items-center h-9 px-3">
-        <span className="text-muted mr-2">{">"}</span>
+      <div className="flex items-center min-h-9 px-3 gap-2">
+        <span className="text-muted shrink-0">{">"}</span>
         <input
           value={q}
           onChange={(e) => setQ(e.target.value)}
@@ -79,10 +79,10 @@ export function SearchBar({ onSelect }: Props) {
               setOpen(false);
             }
           }}
-          placeholder="search symbols — btc, aapl, eth, tsla..."
-          className="flex-1 placeholder:text-muted"
+          placeholder="search — btc, aapl, eth, tsla..."
+          className="flex-1 min-w-0 placeholder:text-muted text-base"
         />
-        <span className="k-label">{loading ? "..." : `${results.length || 0}`}</span>
+        <span className="k-label shrink-0">{loading ? "..." : `${results.length || 0}`}</span>
       </div>
       {open && results.length > 0 && (
         <div className="absolute left-0 right-0 top-full z-20 bg-bg k-border max-h-72 overflow-y-auto">
@@ -95,11 +95,11 @@ export function SearchBar({ onSelect }: Props) {
                 pick(r);
               }}
               onMouseEnter={() => setActive(i)}
-              className={`w-full text-left flex items-center h-8 px-3 ${i === active ? "k-active" : "k-hover"}`}
+              className={`w-full text-left flex items-center gap-2 min-h-9 px-3 py-1.5 ${i === active ? "k-active" : "k-hover"}`}
             >
-              <span className="w-24 truncate">{r.display}</span>
-              <span className="flex-1 truncate text-muted">{r.name}</span>
-              <span className="k-label ml-2">{r.market}</span>
+              <span className="shrink-0 min-w-16 truncate">{r.display}</span>
+              <span className="flex-1 min-w-0 truncate text-muted">{r.name}</span>
+              <span className="k-label shrink-0">{r.market}</span>
             </button>
           ))}
         </div>

@@ -38,6 +38,12 @@ body {
   font-feature-settings: "ss01", "ss02", "tnum";
   text-rendering: geometricPrecision;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  overscroll-behavior-x: none;
+}
+
+input {
+  font-size: 16px;
 }
 
 ::selection {

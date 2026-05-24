@@ -3,7 +3,7 @@
 import { useMemo } from "react";
 import { INDICATOR_LABELS } from "@/lib/constants";
 import { bollinger, ema, macd, rsi, sma, vwap } from "@/lib/indicators";
-import type { Candle, ComputedLevel, IndicatorKey, Settings } from "@/lib/types";
+import type { Candle, ComputedLevel, Settings } from "@/lib/types";
 
 function fmtPrice(n: number | null | undefined): string {
   if (n == null || !isFinite(n)) return "—";
@@ -37,14 +37,19 @@ function fmtTime(t: number): string {
   return `${date} ${time}`;
 }
 
-type Cell = { label: string; value: string; tone?: "muted" | "bull" | "bear" };
+function fmtShortTime(t: number): string {
+  const d = new Date(t * 1000);
+  return d.toISOString().slice(5, 16).replace("T", " ");
+}
 
-function Cell({ label, value, tone }: Cell) {
+type CellData = { label: string; value: string; tone?: "muted" | "bull" | "bear" };
+
+function SummaryCell({ label, value, tone }: CellData) {
   const color = tone === "bull" ? "text-bull" : tone === "bear" ? "text-bear" : "text-fg";
   return (
     <div className="k-border-r k-border-b px-3 py-2 min-w-0">
       <div className="k-label truncate">{label}</div>
-      <div className={`${color} k-tabular text-sm mt-1 truncate`}>{value}</div>
+      <div className={`${color} k-tabular text-sm mt-1 break-words`}>{value}</div>
     </div>
   );
 }
@@ -57,8 +62,8 @@ type Props = {
 
 export function TableView({ candles, settings, levels }: Props) {
   const indicatorCells = useMemo(() => {
-    if (candles.length === 0) return [] as Cell[];
-    const out: Cell[] = [];
+    if (candles.length === 0) return [] as CellData[];
+    const out: CellData[] = [];
     const push = (label: string, v: number | undefined) => {
       if (v != null && isFinite(v)) out.push({ label, value: fmtPrice(v) });
     };
@@ -95,7 +100,7 @@ export function TableView({ candles, settings, levels }: Props) {
     return out;
   }, [candles, settings.indicators]);
 
-  const overview = useMemo<Cell[]>(() => {
+  const overview = useMemo<CellData[]>(() => {
     if (candles.length === 0) return [];
     const last = candles[candles.length - 1];
     const prev = candles[candles.length - 2];
@@ -111,7 +116,7 @@ export function TableView({ candles, settings, levels }: Props) {
     ];
   }, [candles]);
 
-  const levelCells = useMemo<Cell[]>(() => {
+  const levelCells = useMemo<CellData[]>(() => {
     return levels.map((l) => ({ label: l.label, value: fmtPrice(l.value) }));
   }, [levels]);
 
@@ -138,7 +143,7 @@ export function TableView({ candles, settings, levels }: Props) {
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
           {overview.map((c) => (
-            <Cell key={c.label} {...c} />
+            <SummaryCell key={c.label} {...c} />
           ))}
         </div>
       </section>
@@ -150,7 +155,7 @@ export function TableView({ candles, settings, levels }: Props) {
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
             {levelCells.map((c, i) => (
-              <Cell key={`${c.label}-${i}`} {...c} />
+              <SummaryCell key={`${c.label}-${i}`} {...c} />
             ))}
           </div>
         </section>
@@ -163,27 +168,27 @@ export function TableView({ candles, settings, levels }: Props) {
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
             {indicatorCells.map((c, i) => (
-              <Cell key={`${c.label}-${i}`} {...c} />
+              <SummaryCell key={`${c.label}-${i}`} {...c} />
             ))}
           </div>
         </section>
       )}
 
       <section className="flex-1 flex flex-col min-h-0">
-        <div className="px-3 h-7 flex items-center k-border-b shrink-0">
-          <span className="k-label">candles · most recent first · last 300</span>
+        <div className="px-3 h-7 flex items-center k-border-b shrink-0 flex-wrap gap-2">
+          <span className="k-label">candles · newest first · last 300</span>
         </div>
-        <div className="flex-1 overflow-auto">
-          <table className="w-full k-tabular text-xs">
+        <div className="flex-1 overflow-y-auto">
+          <table className="w-full table-fixed k-tabular text-[11px] sm:text-xs">
             <thead className="sticky top-0 bg-bg z-10">
               <tr className="k-border-b">
-                <th className="text-left font-normal k-label px-3 py-2">time (utc)</th>
-                <th className="text-right font-normal k-label px-3 py-2">open</th>
-                <th className="text-right font-normal k-label px-3 py-2">high</th>
-                <th className="text-right font-normal k-label px-3 py-2">low</th>
-                <th className="text-right font-normal k-label px-3 py-2">close</th>
-                <th className="text-right font-normal k-label px-3 py-2">vol</th>
-                <th className="text-right font-normal k-label px-3 py-2">chg</th>
+                <th className="text-left font-normal k-label px-2 py-2">time</th>
+                <th className="hidden md:table-cell text-right font-normal k-label px-2 py-2">open</th>
+                <th className="hidden sm:table-cell text-right font-normal k-label px-2 py-2">high</th>
+                <th className="hidden sm:table-cell text-right font-normal k-label px-2 py-2">low</th>
+                <th className="text-right font-normal k-label px-2 py-2">close</th>
+                <th className="hidden lg:table-cell text-right font-normal k-label px-2 py-2">vol</th>
+                <th className="text-right font-normal k-label px-2 py-2">chg</th>
               </tr>
             </thead>
             <tbody>
@@ -193,13 +198,16 @@ export function TableView({ candles, settings, levels }: Props) {
                 const chgColor = chg == null ? "text-muted" : chg >= 0 ? "text-bull" : "text-bear";
                 return (
                   <tr key={c.time} className="k-border-b">
-                    <td className="px-3 py-1.5">{fmtTime(c.time)}</td>
-                    <td className="px-3 py-1.5 text-right">{fmtPrice(c.open)}</td>
-                    <td className="px-3 py-1.5 text-right">{fmtPrice(c.high)}</td>
-                    <td className="px-3 py-1.5 text-right">{fmtPrice(c.low)}</td>
-                    <td className={`px-3 py-1.5 text-right ${closeColor}`}>{fmtPrice(c.close)}</td>
-                    <td className="px-3 py-1.5 text-right text-muted">{fmtVol(c.volume)}</td>
-                    <td className={`px-3 py-1.5 text-right ${chgColor}`}>{fmtPct(chg)}</td>
+                    <td className="px-2 py-1.5 whitespace-nowrap">
+                      <span className="sm:hidden">{fmtShortTime(c.time)}</span>
+                      <span className="hidden sm:inline">{fmtTime(c.time)}</span>
+                    </td>
+                    <td className="hidden md:table-cell px-2 py-1.5 text-right">{fmtPrice(c.open)}</td>
+                    <td className="hidden sm:table-cell px-2 py-1.5 text-right">{fmtPrice(c.high)}</td>
+                    <td className="hidden sm:table-cell px-2 py-1.5 text-right">{fmtPrice(c.low)}</td>
+                    <td className={`px-2 py-1.5 text-right ${closeColor}`}>{fmtPrice(c.close)}</td>
+                    <td className="hidden lg:table-cell px-2 py-1.5 text-right text-muted">{fmtVol(c.volume)}</td>
+                    <td className={`px-2 py-1.5 text-right ${chgColor}`}>{fmtPct(chg)}</td>
                   </tr>
                 );
               })}

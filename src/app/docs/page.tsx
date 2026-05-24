@@ -172,25 +172,27 @@ function EntryCard({ e }: { e: Entry }) {
   return (
     <article className="k-border-b">
       <header className="px-4 py-3 k-border-b">
-        <h3 className="text-fg">{e.name}</h3>
+        <h3 className="text-fg break-words">{e.name}</h3>
       </header>
       <dl className="grid grid-cols-1 md:grid-cols-4">
-        <div className="md:col-span-2 px-4 py-3 md:k-border-r k-border-b md:k-border-b-0">
+        <div className="md:col-span-2 px-4 py-3 md:k-border-r k-border-b md:k-border-b-0 min-w-0">
           <dt className="k-label mb-1">what it is</dt>
-          <dd className="text-fg">{e.what}</dd>
+          <dd className="text-fg break-words">{e.what}</dd>
         </div>
-        <div className="md:col-span-2 px-4 py-3 k-border-b md:k-border-b-0">
+        <div className="md:col-span-2 px-4 py-3 k-border-b md:k-border-b-0 min-w-0">
           <dt className="k-label mb-1">how to read it</dt>
-          <dd className="text-fg">{e.how}</dd>
+          <dd className="text-fg break-words">{e.how}</dd>
         </div>
-        <div className={`px-4 py-3 ${e.watch ? "md:col-span-2 md:k-border-r" : "md:col-span-4"}`}>
+        <div
+          className={`px-4 py-3 min-w-0 ${e.watch ? "md:col-span-2 md:k-border-r" : "md:col-span-4"}`}
+        >
           <dt className="k-label mb-1">best timeframes</dt>
-          <dd className="text-fg">{e.best}</dd>
+          <dd className="text-fg break-words">{e.best}</dd>
         </div>
         {e.watch && (
-          <div className="md:col-span-2 px-4 py-3 k-border-t md:k-border-t-0">
+          <div className="md:col-span-2 px-4 py-3 k-border-t md:k-border-t-0 min-w-0">
             <dt className="k-label mb-1">watch for</dt>
-            <dd className="text-bear">{e.watch}</dd>
+            <dd className="text-bear break-words">{e.watch}</dd>
           </div>
         )}
       </dl>
@@ -201,43 +203,45 @@ function EntryCard({ e }: { e: Entry }) {
 export default function DocsPage() {
   return (
     <div className="flex flex-col flex-1 min-h-0">
-      <header className="k-border-b flex items-stretch h-10 shrink-0">
-        <div className="px-3 flex items-center k-border-r">
+      <header className="flex flex-wrap items-stretch shrink-0">
+        <div className="px-3 py-2 flex items-center k-border-r k-border-b">
           <span className="text-fg">KYSH</span>
           <span className="text-muted px-2">/</span>
           <span className="text-fg">docs</span>
         </div>
-        <div className="px-3 flex items-center text-muted">
+        <div className="px-3 py-2 flex items-center k-border-r k-border-b text-muted">
           how to read the chart
         </div>
-        <div className="flex-1" />
+        <div className="hidden md:block flex-1 k-border-b" />
         <Link
           href="/"
-          className="px-4 flex items-center k-border-l k-hover"
+          className="px-4 py-2 flex items-center k-border-r k-border-b k-hover"
         >
           back to chart
         </Link>
       </header>
 
-      <main className="flex-1 overflow-auto">
-        <section className="px-4 py-6 k-border-b max-w-4xl">
-          <p className="text-fg leading-relaxed">
-            KYSH is a free chart tool. The math behind each indicator is standard; the trick is
-            knowing which to look at on which timeframe and which question each one answers. Pick
-            one from each row below — a trend tool, an oscillator, a level — and you have enough
-            to read most setups.
-          </p>
-          <p className="text-muted mt-3 leading-relaxed">
-            Nothing here is financial advice. Markets are reflexive and indicators describe the
-            past.
-          </p>
+      <main className="flex-1 overflow-y-auto">
+        <section className="px-4 py-6 k-border-b">
+          <div className="max-w-4xl">
+            <p className="text-fg leading-relaxed break-words">
+              KYSH is a free chart tool. The math behind each indicator is standard; the trick is
+              knowing which to look at on which timeframe and which question each one answers. Pick
+              one from each row below — a trend tool, an oscillator, a level — and you have enough
+              to read most setups.
+            </p>
+            <p className="text-muted mt-3 leading-relaxed break-words">
+              Nothing here is financial advice. Markets are reflexive and indicators describe the
+              past.
+            </p>
+          </div>
         </section>
 
         {SECTIONS.map((s) => (
           <section key={s.title} className="k-border-b">
-            <div className="px-4 py-3 k-border-b flex items-baseline gap-3">
-              <h2 className="text-fg uppercase">{s.title}</h2>
-              {s.intro && <p className="text-muted text-sm">{s.intro}</p>}
+            <div className="px-4 py-3 k-border-b flex flex-col md:flex-row md:items-baseline gap-2 md:gap-3">
+              <h2 className="text-fg uppercase shrink-0">{s.title}</h2>
+              {s.intro && <p className="text-muted text-sm break-words">{s.intro}</p>}
             </div>
             {s.entries.map((e) => (
               <EntryCard key={e.name} e={e} />
@@ -245,17 +249,19 @@ export default function DocsPage() {
           </section>
         ))}
 
-        <section className="px-4 py-6 max-w-4xl">
-          <h2 className="text-fg uppercase mb-3">data sources</h2>
-          <ul className="space-y-1 text-fg">
-            <li><span className="k-label mr-2">crypto</span>Binance.US public REST. No key.</li>
-            <li><span className="k-label mr-2">stocks</span>Yahoo Finance via yahoo-finance2. No key.</li>
-          </ul>
-          <p className="text-muted text-sm mt-4">
-            Yahoo limits intraday history to recent days (1m: ~5 days, 15m: ~60 days). Daily and
-            weekly go back years. Binance.US covers majors and most popular pairs but has a
-            smaller universe than Binance.com.
-          </p>
+        <section className="px-4 py-6">
+          <div className="max-w-4xl">
+            <h2 className="text-fg uppercase mb-3">data sources</h2>
+            <ul className="space-y-1 text-fg break-words">
+              <li><span className="k-label mr-2">crypto</span>Binance.US public REST. No key.</li>
+              <li><span className="k-label mr-2">stocks</span>Yahoo Finance via yahoo-finance2. No key.</li>
+            </ul>
+            <p className="text-muted text-sm mt-4 break-words">
+              Yahoo limits intraday history to recent days (1m: ~5 days, 15m: ~60 days). Daily and
+              weekly go back years. Binance.US covers majors and most popular pairs but has a
+              smaller universe than Binance.com.
+            </p>
+          </div>
         </section>
       </main>
     </div>

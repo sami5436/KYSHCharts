@@ -32,7 +32,7 @@ export function Clock() {
 
   if (!now) {
     return (
-      <div className="px-3 flex items-center k-border-r">
+      <div className="px-3 py-2 flex items-center k-border-r k-border-b">
         <span className="k-label mr-2">now</span>
         <span className="text-muted">--:--:--</span>
       </div>
@@ -41,12 +41,12 @@ export function Clock() {
 
   const { date, time, tz } = format(now);
   return (
-    <div className="px-3 flex items-center k-border-r k-tabular">
-      <span className="k-label mr-2">now</span>
+    <div className="px-3 py-2 flex items-center k-border-r k-border-b k-tabular">
+      <span className="k-label mr-2 shrink-0">now</span>
       <span className="text-fg">{date}</span>
       <span className="text-muted mx-2">/</span>
       <span className="text-fg">{time}</span>
-      <span className="text-muted ml-2">{tz}</span>
+      <span className="text-muted ml-2 hidden sm:inline">{tz}</span>
     </div>
   );
 }

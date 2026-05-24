@@ -22,14 +22,14 @@ function Row({
     <button
       type="button"
       onClick={onToggle}
-      className="w-full flex items-center h-8 px-3 k-hover text-left"
+      className="w-full flex items-center min-h-9 px-3 py-2 k-hover text-left"
     >
       <span
-        className={`inline-block w-3 h-3 mr-3 k-border ${checked ? "bg-accent" : "bg-bg"}`}
+        className={`inline-block w-3 h-3 mr-3 shrink-0 k-border ${checked ? "bg-accent" : "bg-bg"}`}
         aria-hidden
       />
-      <span className="flex-1">{label}</span>
-      <span className="k-label">{checked ? "on" : "off"}</span>
+      <span className="flex-1 break-words pr-2">{label}</span>
+      <span className="k-label shrink-0">{checked ? "on" : "off"}</span>
     </button>
   );
 }
@@ -47,10 +47,12 @@ export function SettingsPanel({ settings, onChange, onClose }: Props) {
     });
 
   return (
-    <div className="absolute top-10 right-0 z-30 w-72 bg-bg k-border">
-      <div className="flex items-center justify-between px-3 h-8 k-border-b">
+    <div
+      className="absolute right-0 top-full z-30 w-72 max-w-[calc(100vw-0.5rem)] max-h-[calc(100dvh-6rem)] overflow-y-auto bg-bg k-border"
+    >
+      <div className="flex items-center justify-between px-3 h-8 k-border-b sticky top-0 bg-bg">
         <span className="k-label">indicators</span>
-        <button type="button" onClick={onClose} className="k-label k-hover px-2">
+        <button type="button" onClick={onClose} className="k-label k-hover px-2 py-1">
           close
         </button>
       </div>
@@ -62,7 +64,7 @@ export function SettingsPanel({ settings, onChange, onClose }: Props) {
           onToggle={() => setIndicator(k)}
         />
       ))}
-      <div className="px-3 h-8 k-border-b k-border-t flex items-center">
+      <div className="px-3 h-8 k-border-b k-border-t flex items-center sticky top-8 bg-bg">
         <span className="k-label">key levels</span>
       </div>
       {(Object.keys(LEVEL_LABELS) as LevelKey[]).map((k) => (
